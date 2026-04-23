@@ -1,4 +1,6 @@
 package desarrolloempresarial.com.bookstoreapi.entity;
 
-public class Author {
+public enum Role {
+    USER,
+    ADMIN
 }
