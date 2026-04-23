@@ -1,15 +1,14 @@
 package desarrolloempresarial.com.bookstoreapi.controller;
-//Expone los endpoints /auth/login y /auth/register
+
 import desarrolloempresarial.com.bookstoreapi.dto.request.LoginRequest;
 import desarrolloempresarial.com.bookstoreapi.dto.request.RegisterRequest;
+import desarrolloempresarial.com.bookstoreapi.dto.response.ApiResponse;
 import desarrolloempresarial.com.bookstoreapi.dto.response.AuthResponse;
 import desarrolloempresarial.com.bookstoreapi.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -19,12 +18,16 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(authService.register(request));
+    public ResponseEntity<ApiResponse<AuthResponse>> register(
+            @RequestBody RegisterRequest request) {
+        AuthResponse data = authService.register(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(data, "Usuario registrado exitosamente", 201));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
-        return ResponseEntity.ok(authService.login(request));
+    public ResponseEntity<ApiResponse<AuthResponse>> login(
+            @RequestBody LoginRequest request) {
+        return ResponseEntity.ok(ApiResponse.success(authService.login(request)));
     }
 }

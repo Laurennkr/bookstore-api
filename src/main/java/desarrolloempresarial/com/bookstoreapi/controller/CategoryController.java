@@ -1,6 +1,7 @@
 package desarrolloempresarial.com.bookstoreapi.controller;
 
 import desarrolloempresarial.com.bookstoreapi.dto.request.CategoryRequest;
+import desarrolloempresarial.com.bookstoreapi.dto.response.ApiResponse;
 import desarrolloempresarial.com.bookstoreapi.dto.response.BookResponse;
 import desarrolloempresarial.com.bookstoreapi.dto.response.CategoryResponse;
 import desarrolloempresarial.com.bookstoreapi.service.BookService;
@@ -22,35 +23,38 @@ public class CategoryController {
     private final BookService bookService;
 
     @PostMapping
-    public ResponseEntity<CategoryResponse> create(@Valid @RequestBody CategoryRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.create(request));
+    public ResponseEntity<ApiResponse<CategoryResponse>> create(
+            @Valid @RequestBody CategoryRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(categoryService.create(request), "Categoría creada", 201));
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryResponse>> findAll() {
-        return ResponseEntity.ok(categoryService.findAll());
+    public ResponseEntity<ApiResponse<List<CategoryResponse>>> findAll() {
+        return ResponseEntity.ok(ApiResponse.success(categoryService.findAll()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryResponse> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(categoryService.findById(id));
+    public ResponseEntity<ApiResponse<CategoryResponse>> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(ApiResponse.success(categoryService.findById(id)));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoryResponse> update(
+    public ResponseEntity<ApiResponse<CategoryResponse>> update(
             @PathVariable Long id,
             @Valid @RequestBody CategoryRequest request) {
-        return ResponseEntity.ok(categoryService.update(id, request));
+        return ResponseEntity.ok(ApiResponse.success(categoryService.update(id, request), "Categoría actualizada", 200));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
         categoryService.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(ApiResponse.success(null, "Categoría eliminada", 200));
     }
 
     @GetMapping("/{id}/books")
-    public ResponseEntity<List<BookResponse>> getBooksByCategory(@PathVariable Long id) {
-        return ResponseEntity.ok(bookService.findByCategory(id));
+    public ResponseEntity<ApiResponse<List<BookResponse>>> getBooksByCategory(
+            @PathVariable Long id) {
+        return ResponseEntity.ok(ApiResponse.success(bookService.findByCategory(id)));
     }
 }

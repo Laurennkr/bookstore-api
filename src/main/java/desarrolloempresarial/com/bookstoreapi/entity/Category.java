@@ -3,8 +3,6 @@ package desarrolloempresarial.com.bookstoreapi.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 @Entity
 @Table(name = "categories")
 @Data
@@ -19,7 +17,4 @@ public class Category {
 
     @Column(nullable = false, unique = true)
     private String name;
-
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    private List<Book> books;
 }

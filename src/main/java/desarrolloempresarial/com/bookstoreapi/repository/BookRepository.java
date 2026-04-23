@@ -11,6 +11,8 @@ import java.util.List;
 public interface BookRepository extends JpaRepository<Book, Long> {
     boolean existsByIsbn(String isbn);
     List<Book> findByAuthorId(Long authorId);
-    List<Book> findByCategoryId(Long categoryId);
     boolean existsByAuthorId(Long authorId);
+
+    @Query("SELECT b FROM Book b JOIN b.categories c WHERE c.id = :categoryId")
+    List<Book> findByCategoryId(Long categoryId);
 }
