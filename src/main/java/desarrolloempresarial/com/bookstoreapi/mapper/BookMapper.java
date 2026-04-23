@@ -7,6 +7,8 @@ import desarrolloempresarial.com.bookstoreapi.dto.response.CategoryResponse;
 import desarrolloempresarial.com.bookstoreapi.entity.Book;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class BookMapper {
 
@@ -34,11 +36,17 @@ public class BookMapper {
             response.setAuthor(authorResponse);
         }
 
-        if (book.getCategory() != null) {
-            CategoryResponse categoryResponse = new CategoryResponse();
-            categoryResponse.setId(book.getCategory().getId());
-            categoryResponse.setName(book.getCategory().getName());
-            response.setCategory(categoryResponse);
+        if (book.getCategories() != null) {
+            List<CategoryResponse> categoryResponses = book.getCategories()
+                    .stream()
+                    .map(cat -> {
+                        CategoryResponse cr = new CategoryResponse();
+                        cr.setId(cat.getId());
+                        cr.setName(cat.getName());
+                        return cr;
+                    })
+                    .toList();
+            response.setCategories(categoryResponses);
         }
 
         return response;

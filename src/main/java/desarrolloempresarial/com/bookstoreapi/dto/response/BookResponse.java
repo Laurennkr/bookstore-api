@@ -3,6 +3,7 @@ package desarrolloempresarial.com.bookstoreapi.dto.response;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 public class BookResponse {
@@ -12,5 +13,5 @@ public class BookResponse {
     private BigDecimal price;
     private Integer stock;
     private AuthorResponse author;
-    private CategoryResponse category;
+    private List<CategoryResponse> categories;
 }

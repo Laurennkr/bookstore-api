@@ -1,6 +1,7 @@
 package desarrolloempresarial.com.bookstoreapi.controller;
 
 import desarrolloempresarial.com.bookstoreapi.dto.request.BookRequest;
+import desarrolloempresarial.com.bookstoreapi.dto.response.ApiResponse;
 import desarrolloempresarial.com.bookstoreapi.dto.response.BookResponse;
 import desarrolloempresarial.com.bookstoreapi.service.BookService;
 import jakarta.validation.Valid;
@@ -10,39 +11,39 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 @RestController
 @RequestMapping("/books")
 @RequiredArgsConstructor
 public class BookController {
-
     private final BookService bookService;
 
     @PostMapping
-    public ResponseEntity<BookResponse> create(@Valid @RequestBody BookRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(bookService.create(request));
+    public ResponseEntity<ApiResponse<BookResponse>> create(
+            @Valid @RequestBody BookRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(bookService.create(request), "Libro creado", 201));
     }
 
     @GetMapping
-    public ResponseEntity<Page<BookResponse>> findAll(Pageable pageable) {
-        return ResponseEntity.ok(bookService.findAll(pageable));
+    public ResponseEntity<ApiResponse<Page<BookResponse>>> findAll(Pageable pageable) {
+        return ResponseEntity.ok(ApiResponse.success(bookService.findAll(pageable)));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookResponse> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(bookService.findById(id));
+    public ResponseEntity<ApiResponse<BookResponse>> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(ApiResponse.success(bookService.findById(id)));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BookResponse> update(
+    public ResponseEntity<ApiResponse<BookResponse>> update(
             @PathVariable Long id,
             @Valid @RequestBody BookRequest request) {
-        return ResponseEntity.ok(bookService.update(id, request));
+        return ResponseEntity.ok(ApiResponse.success(bookService.update(id, request), "Libro actualizado", 200));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
         bookService.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(ApiResponse.success(null, "Libro eliminado", 200));
     }
 }

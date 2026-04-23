@@ -4,10 +4,13 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 public class BookRequest {
+
     @NotBlank(message = "El título es obligatorio")
+    @Size(max = 200, message = "El título no puede superar 200 caracteres")
     private String title;
 
     @NotBlank(message = "El ISBN es obligatorio")
@@ -22,5 +25,5 @@ public class BookRequest {
     private Integer stock;
 
     private Long authorId;
-    private Long categoryId;
+    private List<Long> categoryIds;
 }

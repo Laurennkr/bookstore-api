@@ -1,6 +1,7 @@
 package desarrolloempresarial.com.bookstoreapi.controller;
 
 import desarrolloempresarial.com.bookstoreapi.dto.request.AuthorRequest;
+import desarrolloempresarial.com.bookstoreapi.dto.response.ApiResponse;
 import desarrolloempresarial.com.bookstoreapi.dto.response.AuthorResponse;
 import desarrolloempresarial.com.bookstoreapi.dto.response.BookResponse;
 import desarrolloempresarial.com.bookstoreapi.service.AuthorService;
@@ -22,35 +23,38 @@ public class AuthorController {
     private final BookService bookService;
 
     @PostMapping
-    public ResponseEntity<AuthorResponse> create(@Valid @RequestBody AuthorRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(authorService.create(request));
+    public ResponseEntity<ApiResponse<AuthorResponse>> create(
+            @Valid @RequestBody AuthorRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(authorService.create(request), "Autor creado", 201));
     }
 
     @GetMapping
-    public ResponseEntity<List<AuthorResponse>> findAll() {
-        return ResponseEntity.ok(authorService.findAll());
+    public ResponseEntity<ApiResponse<List<AuthorResponse>>> findAll() {
+        return ResponseEntity.ok(ApiResponse.success(authorService.findAll()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AuthorResponse> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(authorService.findById(id));
+    public ResponseEntity<ApiResponse<AuthorResponse>> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(ApiResponse.success(authorService.findById(id)));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AuthorResponse> update(
+    public ResponseEntity<ApiResponse<AuthorResponse>> update(
             @PathVariable Long id,
             @Valid @RequestBody AuthorRequest request) {
-        return ResponseEntity.ok(authorService.update(id, request));
+        return ResponseEntity.ok(ApiResponse.success(authorService.update(id, request), "Autor actualizado", 200));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
         authorService.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(ApiResponse.success(null, "Autor eliminado", 200));
     }
 
     @GetMapping("/{id}/books")
-    public ResponseEntity<List<BookResponse>> getBooksByAuthor(@PathVariable Long id) {
-        return ResponseEntity.ok(bookService.findByAuthor(id));
+    public ResponseEntity<ApiResponse<List<BookResponse>>> getBooksByAuthor(
+            @PathVariable Long id) {
+        return ResponseEntity.ok(ApiResponse.success(bookService.findByAuthor(id)));
     }
 }
